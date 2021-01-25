@@ -55,7 +55,7 @@ export class UserModel {
       })
     ); // 过滤空字符串和null查询
     const count = await this.repository.count(searchData);
-    const users = await this.repository.find({
+    const list = await this.repository.find({
       where: {
         ...searchData
       },
@@ -64,7 +64,7 @@ export class UserModel {
       select: this.select
     });
     const data = {
-      users,
+      list,
       count
     };
     return data;
