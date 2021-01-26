@@ -4,6 +4,9 @@ import { getRepository, Like, Repository } from 'typeorm';
 import { cryptoPassword } from '../utils/crypot';
 import { Injectable } from 'koa-route-decors'; // 导入Injectable装饰器，申明该类可被注入
 
+interface SearchDataProps {
+  username?: any;
+}
 @Injectable()
 export class UserModel {
   private repository: Repository<User>;
@@ -47,11 +50,9 @@ export class UserModel {
   }
 
   async getListBypage(username: string, pageIndex: number, pageSize: number) {
-    let searchData: any;
+    let searchData: SearchDataProps = new Object();
     if (username) {
-      searchData = {
-        username: Like(`%${username}%`)
-      }
+      searchData.username = Like(`%${username}%`);
     }
     const total = await this.repository.count(searchData);
     const list = await this.repository.find({
