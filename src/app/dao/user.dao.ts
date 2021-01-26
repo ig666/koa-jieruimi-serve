@@ -1,6 +1,6 @@
 // user/user.model.ts 创建实体模型
 import { User } from '../entities/user.entity';
-import { getRepository, IsNull, Not, Repository } from 'typeorm';
+import { getRepository, Like, Repository } from 'typeorm';
 import { cryptoPassword } from '../utils/crypot';
 import { Injectable } from 'koa-route-decors'; // 导入Injectable装饰器，申明该类可被注入
 
@@ -47,25 +47,22 @@ export class UserModel {
   }
 
   async getListBypage(username: string, pageIndex: number, pageSize: number) {
-    let searchData = { username };
-    searchData = JSON.parse(
-      JSON.stringify(searchData, (key: any, value: any) => {
-        if (!value) return undefined;
-        return value;
-      })
-    ); // 过滤空字符串和null查询
-    const count = await this.repository.count(searchData);
+    let searchData: any;
+    if (username) {
+      searchData = {
+        username: Like(`%${username}%`)
+      }
+    }
+    const total = await this.repository.count(searchData);
     const list = await this.repository.find({
-      where: {
-        ...searchData
-      },
+      where: searchData,
       skip: pageSize * (pageIndex - 1),
       take: pageSize,
       select: this.select
     });
     const data = {
       list,
-      count
+      total
     };
     return data;
   }
