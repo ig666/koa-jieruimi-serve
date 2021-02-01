@@ -43,7 +43,7 @@ export class App {
   start(port: number) {
     this.app.listen(port, () => {
       connection();
-      console.log('service is started');
+      console.log(`service is started:${port}`);
     });
   }
 }

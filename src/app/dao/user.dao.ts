@@ -2,6 +2,7 @@
 import { User } from '../entities/user.entity';
 import { getRepository, Like, Repository } from 'typeorm';
 import { cryptoPassword } from '../utils/crypot';
+import { CustomError } from '../core/error';
 import { Injectable } from 'koa-route-decors'; // 导入Injectable装饰器，申明该类可被注入
 
 @Injectable()
@@ -58,12 +59,26 @@ export class UserModel {
       where: searchData,
       skip: pageSize * (pageIndex - 1),
       take: pageSize,
-      select: this.select
+      select: ['id', 'username', 'nickname', 'gender', 'createTime', 'updateTime']
     });
     const data = {
       list,
       total
     };
     return data;
+  }
+
+  async deleteUser(ids: string | string[]) {
+    await this.repository.delete(ids)
+  }
+
+  async updateUser(user: User) {
+    let userParams = JSON.parse(JSON.stringify(user, (key, val) => {
+      if (!val) return undefined
+      return val
+    }))
+    const id = userParams.id
+    delete userParams.id
+    await this.repository.update(id, userParams)
   }
 }

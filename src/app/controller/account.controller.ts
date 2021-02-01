@@ -1,12 +1,12 @@
 import { Context } from 'koa';
-import { Post, Controller, Get } from 'koa-route-decors';
+import { Post, Controller, Get, Delete } from 'koa-route-decors';
 import * as jwt from 'jsonwebtoken';
 import { JWT_SECRET } from '../constants';
 import { AccountService } from '../service/account.service';
 
 @Controller()
 export class AccountController {
-  constructor(private accountService: AccountService) {}
+  constructor(private accountService: AccountService) { }
   @Post()
   async register(ctx: Context, next: () => Promise<any>) {
     const { username, password, nickname } = ctx.request.body;
@@ -31,7 +31,7 @@ export class AccountController {
     const token = jwt.sign(
       { username: user.username, id: user.id },
       JWT_SECRET,
-      { expiresIn: '30d' }
+      { expiresIn: '3d' }
     );
     ctx.result = {
       id: user.id,
@@ -44,7 +44,7 @@ export class AccountController {
 
   @Get()
   async getListBypage(ctx: Context, next: () => Promise<any>) {
-    const { username, pageSize, pageIndex } = ctx.query;
+    const { username, pageSize, pageIndex } = ctx.request.query;
     const data = await this.accountService.getListBypage(
       username,
       pageIndex,
@@ -52,5 +52,20 @@ export class AccountController {
     );
     ctx.result = data;
     await next();
+  }
+
+  @Delete()
+  async deleteUser(ctx: Context, next: () => Promise<any>) {
+    const { id } = ctx.request.query;
+    await this.accountService.deleteUser(id)
+    ctx.result='删除成功'
+    await next();
+  }
+
+  @Post()
+  async updateUser(ctx:Context,next:()=>Promise<any>){
+    await this.accountService.updateUser(ctx.request.body)
+    ctx.result='修改成功'
+    await next()
   }
 }

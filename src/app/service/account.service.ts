@@ -6,7 +6,7 @@ import { Injectable } from 'koa-route-decors';
 
 @Injectable()
 export class AccountService {
-  constructor(private userModel: UserModel) {}
+  constructor(private userModel: UserModel) { }
 
   async insert(username: string, password: string, nickname: string) {
     const exist = await this.userModel.findByUsername(username);
@@ -41,5 +41,21 @@ export class AccountService {
       pageSize
     );
     return data;
+  }
+
+  async deleteUser(ids: string | string[]) {
+    await this.userModel.deleteUser(ids);
+  }
+
+  async updateUser(user: User) {
+    const exist = await this.userModel.findById(user.id);
+    if (exist) {
+      if (!user.username) {
+        throw new CustomError(-1, '姓名必传');
+      }
+      await this.userModel.updateUser(user)
+    } else {
+      throw new CustomError(-1, '用户不存在');
+    }
   }
 }

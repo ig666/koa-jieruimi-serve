@@ -14,7 +14,7 @@ configure({
       pattern: 'yyyy-MM-dd',
       compress: false, // compress 为 true，记录当天日志时，会对以往的老日志进行压缩操作，压缩文件后缀为 .gz (默认 : false)
       alwaysIncludePattern: true, // 当为 true 时，log 文件名会包含之前设置的 pattern 信息 (默认为 false，但是强烈建议开启)
-      daysToKeep: 0, // 指定日志保留的天数 ( 默认为 0，始终保留 )
+      daysToKeep: 30, // 指定日志保留的天数 ( 默认为 0，始终保留 )
       keepFileExt: true // 是否保持日志文件后缀名
     }
   },
