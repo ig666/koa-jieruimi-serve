@@ -3,6 +3,7 @@ import { Post, Controller, Get, Delete } from 'koa-route-decors';
 import * as jwt from 'jsonwebtoken';
 import { JWT_SECRET } from '../constants';
 import { AccountService } from '../service/account.service';
+import * as Joi from 'joi'
 
 @Controller()
 export class AccountController {
@@ -45,6 +46,7 @@ export class AccountController {
   @Get()
   async getListBypage(ctx: Context, next: () => Promise<any>) {
     const { username, pageSize, pageIndex } = ctx.request.query;
+    Joi.assert(username, Joi.number().error(new Error('查询条件不符合')))
     const data = await this.accountService.getListBypage(
       username,
       pageIndex,
