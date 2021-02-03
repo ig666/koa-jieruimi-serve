@@ -1,4 +1,4 @@
-import { UserModel } from '../dao/user.dao';
+import { UserModel } from '../dao/account.dao';
 import { CustomError } from '../core/error';
 import { User } from '../entities/user.entity';
 import { cryptoPassword } from '../utils/crypot';
@@ -32,8 +32,8 @@ export class AccountService {
 
   async getListBypage(
     username: string,
-    pageIndex: number = 1,
-    pageSize: number = 10
+    pageIndex: number,
+    pageSize: number
   ) {
     const data = await this.userModel.getListBypage(
       username,
