@@ -1,49 +1,51 @@
-import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, OneToMany } from 'typeorm';
+import { ServicePestisList } from './servicePestisList.entity'
 
-interface servicePestis {
-    area: string,
-    questionClassify: string,
-    position?: string,
-    handling?: string,
-    advice?: string,
-    imgSrc?: string
-}
 
 @Entity()
 export class Pdf {
     @PrimaryGeneratedColumn('uuid')
     id!: string;
 
-    @Column()
+    //服务商名称
+    @Column({ default: null })
     serviceName!: string;
 
-    @Column()
+    //餐厅名称/国际编码
+    @Column({ default: null })
     restaurant!: string;
 
-    @Column()
-    serviceDate!: string;
+    //服务日期
+    @Column({default:null})
+    serviceTime!: Date;
 
-    @Column()
+    //餐厅内部压力
+    @Column({ default: null })
     restaurantStress!: string;
 
-    @Column()
+    //服务人员
+    @Column({ default: null })
     servicePerson!: string;
 
-    @Column()
+    //服务形式
+    @Column({ default: null })
     serviceMethod!: string;
 
-    @Column()
-    serviceStartTime!: string;
+    //服务开始时间
+    @Column({ default: null })
+    serviceStartTime!: Date;
 
-    @Column()
-    serviceEndTime!: string;
+    //服务结束时间
+    @Column({ default: null })
+    serviceEndTime!: Date;
 
-    @Column({type:'simple-array'})
-    servicePestisList!: servicePestis[];
+    //餐厅虫害风险结构list
+    @OneToMany(() => ServicePestisList, servicePestisList => servicePestisList.pdf,{cascade:true})
+    servicePestisLists!: ServicePestisList[];
 
     @CreateDateColumn()
     createTime!: Date;
-  
+
     @UpdateDateColumn()
     updateTime!: Date;
 }

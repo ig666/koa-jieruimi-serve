@@ -50,8 +50,8 @@ export class AccountService {
   async updateUser(user: User) {
     const exist = await this.userModel.findById(user.id);
     if (exist) {
-      if (!user.username) {
-        throw new CustomError(-1, '姓名必传');
+      if (user.password) {
+        user.password = cryptoPassword(user.password, user.username);
       }
       await this.userModel.updateUser(user)
     } else {
