@@ -10,4 +10,8 @@ export class PdfService {
     async insert(pdf: Pdf) {
         this.pdfModel.create(pdf)
     }
+    async getPdfList(searchData: any, pageIndex: number=1, pageSize: number=10) {
+        const data = await this.pdfModel.getPdfList(searchData, pageIndex, pageSize)
+        return data
+    }
 }

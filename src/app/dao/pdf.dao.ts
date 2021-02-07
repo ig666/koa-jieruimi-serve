@@ -1,5 +1,5 @@
 // /pdf.dao.ts 创建实体模型
-import { getRepository, Like, Repository } from 'typeorm';
+import { getRepository, LessThanOrEqual, Like, MoreThanOrEqual, Repository } from 'typeorm';
 import { Injectable } from 'koa-route-decors'; // 导入Injectable装饰器，申明该类可被注入
 import { Pdf } from '../entities/pdf.entity';
 
@@ -20,24 +20,31 @@ export class PdfModel {
 //     return user;
 //   }
 
-//   async getListBypage(username: string, pageIndex: number, pageSize: number) {
-//     let searchData: SearchDataProps = new Object();
-//     if (username) {
-//       searchData.username = Like(`%${username}%`);
-//     }
-//     const total = await this.repository.count(searchData);
-//     const list = await this.repository.find({
-//       where: searchData,
-//       skip: pageSize * (pageIndex - 1),
-//       take: pageSize,
-//       select: ['id', 'username', 'nickname', 'gender', 'createTime', 'updateTime']
-//     });
-//     const data = {
-//       list,
-//       total
-//     };
-//     return data;
-//   }
+  async getPdfList(searchData: any, pageIndex: number, pageSize: number) {
+    if(searchData.serviceName){
+      searchData.serviceName=Like(`%${searchData.serviceName}%`)
+    }
+    if(searchData.servicePerson){
+      searchData.servicePerson=Like(`%${searchData.servicePerson}%`)
+    }
+    if(searchData.serviceStartTime){
+      searchData.serviceStartTime=MoreThanOrEqual(searchData.serviceStartTime)
+    }
+    if(searchData.serviceEndTime){
+      searchData.serviceEndTime=LessThanOrEqual(searchData.serviceStartTime)
+    }
+    const total = await this.repository.count(searchData);
+    const list = await this.repository.find({
+      where:searchData,
+      skip: pageSize * (pageIndex - 1),
+      take: pageSize
+    });
+    const data = {
+      list,
+      total
+    };
+    return data;
+  }
 
 //   async deleteUser(ids: string | string[]) {
 //     await this.repository.delete(ids)
