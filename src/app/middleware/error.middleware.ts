@@ -11,6 +11,6 @@ export async function errorHandle(ctx: Context, next: () => Promise<any>) {
       code: err.code || -1,
       message: err.message.trim()
     };
-    ctx.status = 200; // 状态码200让前端不报错
+    ctx.status = err.status === 401 ? err.status : 200; // 状态码200让前端不报错
   }
 }

@@ -16,8 +16,8 @@ export class Pdf {
     restaurant!: string;
 
     //服务日期
-    @Column({default:null})
-    serviceTime!: Date;
+    @Column({ default: null, type: 'datetime' })
+    serviceTime!: string;
 
     //餐厅内部压力
     @Column({ default: null })
@@ -32,20 +32,20 @@ export class Pdf {
     serviceMethod!: string;
 
     //服务开始时间
-    @Column({ default: null })
-    serviceStartTime!: Date;
+    @Column({ default: null, type: 'datetime' })
+    serviceStartTime!: string;
 
     //服务结束时间
-    @Column({ default: null })
-    serviceEndTime!: Date;
+    @Column({ default: null, type: 'datetime' })
+    serviceEndTime!: string;
 
     //餐厅虫害风险结构list
-    @OneToMany(() => ServicePestisList, servicePestisList => servicePestisList.pdf,{cascade:true})
+    @OneToMany(() => ServicePestisList, servicePestisList => servicePestisList.pdf, { cascade: true })
     servicePestisLists!: ServicePestisList[];
 
-    @CreateDateColumn()
-    createTime!: Date;
+    @CreateDateColumn({ type: 'datetime' })
+    createTime!: string;
 
-    @UpdateDateColumn()
-    updateTime!: Date;
+    @UpdateDateColumn({ type: 'datetime' })
+    updateTime!: string;
 }
