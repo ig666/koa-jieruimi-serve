@@ -60,7 +60,7 @@ export class PdfController {
   //     // 接收读出流
   //     const reader = fs.createReadStream(val.path);
   //     // 创建写入流
-  //     // 3. 指定图片路径文件名（即上传图片存储目录）
+  //     // 3. 指定路径文件名（即上传文件存储目录）
   //     const stream = fs.createWriteStream(val.name);
   //     // 用管道将读出流 "倒给" 输入流
   //     reader.pipe(stream);
